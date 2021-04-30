@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:v_braille/screens/ShowNotes.dart';
 import 'package:v_braille/util/SizeConfig.dart';
 
 import '../util/Mappings.dart';
@@ -32,41 +33,17 @@ class _NotesScreenState extends State<NotesScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.05,
-                    right: MediaQuery.of(context).size.width * 0.05),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: SizeConfig.safeBlockHorizontal * 62,
-                      //color: Colors.grey,
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: '👉 Select Braille Grade',
-                                style: GoogleFonts.montserrat(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
-                              TextSpan(
-                                text: '.',
-                                style: GoogleFonts.montserrat(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.indigo),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Container(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.05,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: Text(
+                    '👉 Select Braille Grade.',
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: SizeConfig.safeBlockHorizontal * 5.5),
+                  ),
                 ),
               ),
               SizedBox(
@@ -149,6 +126,56 @@ class _NotesScreenState extends State<NotesScreen> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.08,
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    right: MediaQuery.of(context).size.width * 0.05),
+                child: Text(
+                  '👉 Read Pdf Here.',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: SizeConfig.safeBlockHorizontal * 5.5),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.08,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    right: MediaQuery.of(context).size.width * 0.05),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 90,
+                  height: SizeConfig.safeBlockVertical * 7,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ShowNotes();
+                      }));
+                    },
+                    child: Material(
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.circular(30.0),
+                      shadowColor: Colors.indigo,
+                      elevation: 5.0,
+                      child: Center(
+                        child: Text(
+                          'Read Pdf',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
