@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:v_braille/util/SizeConfig.dart';
-import 'package:v_braille/widgets/ModuleTiles.dart';
+import 'package:video_player/video_player.dart';
 
 class VideosScreen extends StatefulWidget {
   @override
@@ -10,78 +8,57 @@ class VideosScreen extends StatefulWidget {
 }
 
 class _VideosScreenState extends State<VideosScreen> {
+  VideoPlayerController _controller;
+  Future<void> _initializeVideoPlayerFuture;
   @override
-  List<ModuleTile> moduleTiles = [
-    ModuleTile(
-      label: '',
-      name: 'Video 1',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 2',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 4',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 5',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 6',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 7',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 8',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 9',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 10',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 11',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 12',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 13',
-    ),
-    ModuleTile(
-      label: '',
-      name: 'Video 14',
-    )
-  ];
+  void initState() {
+    _controller = VideoPlayerController.network(
+        "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4");
+    //_controller = VideoPlayerController.asset("videos/sample_video.mp4");
+    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.setLooping(true);
+    _controller.setVolume(1.0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Scaffold(
-      body: Column(
-        children: [
-          Container()
-          // Padding(
-          //   padding: EdgeInsets.only(top: 4.0),
-          //   child: ListView(
-          //     scrollDirection: Axis.vertical,
-          //     shrinkWrap: true,
-          //     physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-          //     children: moduleTiles,
-          //   ),
-          // ),
-        ],
+      body: FutureBuilder(
+        future: _initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
+              child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            if (_controller.value.isPlaying) {
+              _controller.pause();
+            } else {
+              _controller.play();
+            }
+          });
+        },
+        child:
+            Icon(_controller.value.isPlaying ? Icons.pause : Icons.play_arrow),
       ),
     );
   }
